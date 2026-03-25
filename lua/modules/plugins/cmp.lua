@@ -27,10 +27,12 @@ return {
         ["<C-f>"] = cmp.mapping.scroll_docs(4),
         ["<C-y>"] = cmp.mapping.confirm({ select = true }),
         ["<C-Space>"] = cmp.mapping.complete(),
-        -- Tab: select next / confirm
+        -- Tab: accept Copilot ghost text > confirm cmp > luasnip > fallback
         ["<Tab>"] = cmp.mapping(function(fallback)
           if cmp.visible() then
-            cmp.select_next_item()
+            cmp.confirm({ select = true })
+          elseif vim.fn["copilot#GetDisplayedSuggestion"]().text ~= "" then
+            vim.api.nvim_feedkeys(vim.fn["copilot#Accept"](""), "i", true)
           elseif luasnip.expand_or_locally_jumpable() then
             luasnip.expand_or_jump()
           else

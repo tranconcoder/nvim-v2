@@ -7,6 +7,13 @@ return {
       "WhoIsSethDaniel/mason-tool-installer.nvim",
     },
     config = function()
+      vim.api.nvim_create_autocmd("CursorHold", {
+        group = vim.api.nvim_create_augroup("lsp-diagnostics-hover", { clear = true }),
+        callback = function()
+          vim.diagnostic.open_float(nil, { focus = false, scope = "cursor" })
+        end,
+      })
+
       vim.api.nvim_create_autocmd("LspAttach", {
         group = vim.api.nvim_create_augroup("lsp-attach", { clear = true }),
         callback = function(event)
