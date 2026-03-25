@@ -1,6 +1,17 @@
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
+-- Fix self-signed certificate errors for copilot (Node.js)
+vim.env.NODE_TLS_REJECT_UNAUTHORIZED = "0"
+
+-- Compatibility shim: ft_to_lang removed in Neovim 0.10+
+if not vim.treesitter.ft_to_lang then
+  vim.treesitter.ft_to_lang = function(ft)
+    local ok, lang = pcall(vim.treesitter.language.get_lang, ft)
+    return ok and lang or ft
+  end
+end
+
 vim.opt.number = true
 vim.opt.relativenumber = true
 vim.opt.mouse = "a"

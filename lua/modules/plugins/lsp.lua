@@ -4,6 +4,7 @@ return {
     dependencies = {
       "mason.nvim",
       "williamboman/mason-lspconfig.nvim",
+      "WhoIsSethDaniel/mason-tool-installer.nvim",
     },
     config = function()
       vim.api.nvim_create_autocmd("LspAttach", {
@@ -32,10 +33,31 @@ return {
       end
 
       require("mason-lspconfig").setup({
+        ensure_installed = {
+          "ts_ls",   -- TypeScript / JavaScript
+          "lua_ls",  -- Lua
+        },
+        automatic_installation = true,
         handlers = {
           function(server_name)
             require("lspconfig")[server_name].setup({
               capabilities = capabilities,
+            })
+          end,
+          ["ts_ls"] = function()
+            require("lspconfig").ts_ls.setup({
+              capabilities = capabilities,
+              init_options = {
+                preferences = {
+                  includeInlayParameterNameHints = "all",
+                  includeInlayFunctionParameterTypeHints = true,
+                  includeInlayVariableTypeHints = true,
+                },
+              },
+              on_attach = function(client)
+                client.server_capabilities.documentFormattingProvider = false
+                client.server_capabilities.documentRangeFormattingProvider = false
+              end,
             })
           end,
           ["lua_ls"] = function()
@@ -61,5 +83,19 @@ return {
   {
     "williamboman/mason.nvim",
     config = true,
+  },
+
+  {
+    "WhoIsSethDaniel/mason-tool-installer.nvim",
+    config = function()
+      require("mason-tool-installer").setup({
+        ensure_installed = {
+          "prettier",   -- JS/TS/CSS/HTML/JSON/YAML formatter
+          "stylua",     -- Lua formatter
+        },
+        auto_update = false,
+        run_on_start = true,
+      })
+    end,
   },
 }

@@ -87,6 +87,11 @@ PACMAN_PKGS=(
     curl
     gzip
     tar
+
+    # avante.nvim build dependencies
+    rust
+    cargo
+    luarocks
 )
 
 info "Installing pacman packages..."
@@ -117,7 +122,7 @@ info "════════════════════════�
 info ""
 info "Next steps:"
 info "  1. Set your terminal font to 'JetBrainsMono Nerd Font'"
-info "  2. Launch nvim — lazy.nvim will auto-install plugins"
+info "  2. Launch nvim — lazy.nvim will auto-install plugins + build avante.nvim"
 info "  3. Run :Mason to install LSP servers:"
 info "       :MasonInstall lua-language-server"
 info "       :MasonInstall typescript-language-server"
