@@ -5,7 +5,14 @@ return {
     config = function()
       vim.g.loaded_netrw = 1
       vim.g.loaded_netrwPlugin = 1
-      require("nvim-tree").setup()
+      require("nvim-tree").setup({
+        view = {
+          width = 30,
+        },
+        renderer = {
+          highlight_opened_files = "all",
+        },
+      })
       vim.keymap.set("n", "<leader>e", "<cmd>NvimTreeToggle<CR>", { desc = "Toggle file explorer" })
     end,
   },
