@@ -56,3 +56,28 @@ vim.api.nvim_create_autocmd("BufEnter", {
     end
   end,
 })
+
+-- Auto-refresh files edited by external applications
+vim.api.nvim_create_autocmd({ "FocusGained", "BufEnter", "CursorHold" }, {
+  group = vim.api.nvim_create_augroup("auto-refresh-external", { clear = true }),
+  callback = function()
+    local buf = vim.api.nvim_get_current_buf()
+    local bufname = vim.api.nvim_buf_get_name(buf)
+    
+    -- Skip special buffers, empty buffers, and read-only files
+    if bufname == "" or vim.bo[buf].buftype ~= "" or vim.bo[buf].readonly then
+      return
+    end
+    
+    -- Check if file exists and is readable
+    if vim.fn.filereadable(bufname) == 1 then
+      -- Check if file was modified externally
+      local file_changed = vim.fn.getftime(bufname) > vim.fn.getbufvar(buf, "changedtick")
+      
+      if file_changed and not vim.bo[buf].modified then
+        -- File was changed externally and we haven't modified it locally
+        vim.cmd("checktime " .. buf)
+      end
+    end
+  end,
+})
