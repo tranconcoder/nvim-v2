@@ -19,8 +19,10 @@ return {
     },
     opts = {
       provider = "copilot",
-      copilot = {
-        model = "gpt-4.1",
+      providers = {
+        copilot = {
+          model = "claude-3.5-haiku",
+        },
       },
       behaviour = {
         auto_suggestions = false,
