@@ -31,8 +31,6 @@ return {
         ["<Tab>"] = cmp.mapping(function(fallback)
           if cmp.visible() then
             cmp.confirm({ select = true })
-          elseif vim.fn["copilot#GetDisplayedSuggestion"]().text ~= "" then
-            vim.api.nvim_feedkeys(vim.fn["copilot#Accept"](""), "i", true)
           elseif luasnip.expand_or_locally_jumpable() then
             luasnip.expand_or_jump()
           else

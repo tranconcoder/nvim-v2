@@ -51,9 +51,10 @@ return {
 		event = "BufReadPost",
 		opts = {
 			enabled = true,
-			message_template = " <author> • <date> • <summary>",
+			-- Thêm 5 khoảng trắng ở đầu chuỗi để tạo khoảng cách với ký tự cuối cùng
+			message_template = "     <author> • <date> • <summary>",
 			date_format = "%d/%m/%Y",
-			virtual_text_column = 80,
+			-- XÓA HOÀN TOÀN DÒNG: virtual_text_column = 80,
 			highlight_group = "Comment",
 		},
 		keys = {
