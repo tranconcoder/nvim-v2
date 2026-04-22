@@ -17,14 +17,13 @@ return {
 				},
 
 				view = {
-					width = 30,
+					width = 45,
 					side = "left",
 					number = false,
 					relativenumber = false,
 					float = {
 						enable = false,
 					},
-					autofocus = false,
 				},
 
 				renderer = {
@@ -51,7 +50,7 @@ return {
 				actions = {
 					open_file = {
 						resize_window = false,
-						quit_on_open = true,
+						quit_on_open = false,
 						window_picker = {
 							enable = false,
 						},
@@ -59,7 +58,7 @@ return {
 				},
 
 				update_focused_file = {
-					enable = false,
+					enable = true,
 					update_cwd = false,
 					ignore_list = {},
 				},
@@ -85,16 +84,15 @@ return {
 			end,
 		})
 
-		-- Keymaps
 		vim.keymap.set("n", "<A-e>", function()
-				local api = require("nvim-tree.api")
-				if api.tree.is_visible() then
-					api.tree.close()
-				else
-					api.tree.open()
-					api.tree.find_file()
-				end
-			end, { desc = "Toggle nvim-tree" })
+			local api = require("nvim-tree.api")
+			if api.tree.is_visible() then
+				api.tree.close()
+			else
+				api.tree.open({ find_file = true })
+			end
+		end, { desc = "Toggle nvim-tree and find current file" })
+
 		end,
 	},
 }

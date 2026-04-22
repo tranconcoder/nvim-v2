@@ -1,6 +1,9 @@
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
+-- Suppress nvim-tree deprecation warnings
+vim.g.nvim_tree_no_warning = 1
+
 -- Compatibility shim: ft_to_lang removed in Neovim 0.10+
 if not vim.treesitter.ft_to_lang then
   vim.treesitter.ft_to_lang = function(ft)

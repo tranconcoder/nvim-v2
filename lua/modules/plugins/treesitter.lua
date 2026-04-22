@@ -21,9 +21,9 @@ return {
     local function animate_width(target_width)
       -- Cancel any existing animation safely
       if current_animation_timer then
-        -- Use pcall to avoid errors if the timer was already stopped or invalid
         pcall(function()
           current_animation_timer:stop()
+          current_animation_timer:close()
         end)
         current_animation_timer = nil
       end
@@ -55,6 +55,7 @@ return {
             -- Stop only this timer instance safely
             pcall(function()
               timer:stop()
+              timer:close()
             end)
             if current_animation_timer == timer then
               current_animation_timer = nil
@@ -86,6 +87,19 @@ return {
       return true
     end
     
+    vim.api.nvim_create_autocmd("VimLeavePre", {
+      group = group,
+      callback = function()
+        if current_animation_timer then
+          pcall(function()
+            current_animation_timer:stop()
+            current_animation_timer:close()
+          end)
+          current_animation_timer = nil
+        end
+      end,
+    })
+
     -- On entering a buffer
     vim.api.nvim_create_autocmd("BufEnter", {
       group = group,
