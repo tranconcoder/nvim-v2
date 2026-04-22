@@ -37,7 +37,8 @@ return {
     vim.keymap.set("n", "<Tab>", function()
       builtin.buffers({
         sort_mru = true,
-        previewer = true,
+        previewer = false,
+        initial_mode = "insert",
       })
     end, { desc = "Buffer history (preview)" })
     vim.keymap.set("n", "<leader>ff", builtin.find_files, { desc = "Find files" })

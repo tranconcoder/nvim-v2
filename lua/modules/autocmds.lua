@@ -32,31 +32,6 @@ vim.api.nvim_create_autocmd("SwapExists", {
   end,
 })
 
--- Auto-reveal current file in nvim-tree on focus
-vim.api.nvim_create_autocmd("BufEnter", {
-  group = vim.api.nvim_create_augroup("nvim-tree-reveal", { clear = true }),
-  callback = function()
-    local bufname = vim.api.nvim_buf_get_name(0)
-    local buftype = vim.bo.buftype
-    
-    -- Skip special buffers and nvim-tree itself
-    if bufname == "" or buftype ~= "" or bufname:match("NvimTree") then
-      return
-    end
-    
-    -- Only reveal if it's a readable file
-    if vim.fn.filereadable(bufname) == 1 then
-      local ok, api = pcall(require, "nvim-tree.api")
-      if ok then
-        -- Use a deferred call to avoid conflicts with other autocommands
-        vim.defer_fn(function()
-          pcall(api.tree.find_file, { open = true, focus = false })
-        end, 10)
-      end
-    end
-  end,
-})
-
 -- Auto-refresh files edited by external applications
 vim.api.nvim_create_autocmd({ "FocusGained", "BufEnter", "CursorHold" }, {
   group = vim.api.nvim_create_augroup("auto-refresh-external", { clear = true }),
