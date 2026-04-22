@@ -17,11 +17,7 @@ return {
 				},
 
 				view = {
-					width = {
-						min = 30,
-						max = -1,
-						determinator = "window",
-					},
+					width = 30,
 					side = "left",
 					number = false,
 					relativenumber = false,
@@ -63,19 +59,37 @@ return {
 				},
 
 				update_focused_file = {
-					enable = true,
+					enable = false,
 					update_cwd = false,
 					ignore_list = {},
 				},
 				sync_root_with_cwd = false,
 				respect_buf_cwd = false,
-			})
+				hijack_cursor = false,
+				auto_close = false,
+		})
 
-			-- Keymaps
-			vim.keymap.set("n", "<C-e>", function()
+		-- Auto-find current file in nvim-tree when buffer changes (only if tree is visible)
+		vim.api.nvim_create_autocmd("BufEnter", {
+			group = vim.api.nvim_create_augroup("nvim-tree-find-file", { clear = true }),
+			callback = function()
+				local ok, api = pcall(require, "nvim-tree.api")
+				if ok and api.tree.is_visible() then
+					local bufname = vim.api.nvim_buf_get_name(0)
+					if bufname ~= "" and vim.bo.buftype == "" then
+						vim.defer_fn(function()
+							pcall(api.tree.find_file, { open = false, focus = false })
+						end, 10)
+					end
+				end
+			end,
+		})
+
+		-- Keymaps
+		vim.keymap.set("n", "<A-e>", function()
 				local api = require("nvim-tree.api")
 				if api.tree.is_visible() then
-					api.tree.toggle()
+					api.tree.close()
 				else
 					api.tree.open()
 					api.tree.find_file()

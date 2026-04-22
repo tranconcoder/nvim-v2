@@ -37,7 +37,7 @@ return {
     vim.keymap.set("n", "<Tab>", function()
       builtin.buffers({
         sort_mru = true,
-        previewer = false,
+        previewer = true,
         initial_mode = "insert",
       })
     end, { desc = "Buffer history (preview)" })
